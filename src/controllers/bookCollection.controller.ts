@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Patch, Path, Post, Route, Tags} from "tsoa";
+import {Body, Controller, Delete, Get, Patch, Path, Post, Route, Tags} from "tsoa";
 import { BookCollectionDTO} from "../dto/bookCollection.dto";
 import { bookCollectionService} from "../services/bookCollection.service";
 import {string} from "joi";
@@ -72,6 +72,18 @@ export class BookCollectionController extends Controller {
         }
 
         return bookCollectionService.patchBookCollection(id, bookDetails, available, state);
+    }
+
+    // Supprime une collection de livres par ID
+    @Delete("{id}")
+    public async deleteBookCollection(@Path() id: number): Promise<void> {
+        try {
+            await bookCollectionService.deleteBookCollection(id);
+        } catch (error) {
+            const err = new Error((error as Error).message);
+            (err as any).status = 400;
+            throw err;
+        }
     }
 
 }

@@ -44,6 +44,17 @@ export class BookCollectionService {
         return null;
     }
 
+    // Supprime une collection de livres par ID
+    public async deleteBookCollection(id: number): Promise<void> {
+        const bookCollection = await BookCollection.findByPk(id);
+        if (!bookCollection) {
+            throw new Error("BookCollection not found");
+        }
+
+        await bookCollection.destroy();
+    }
+
+
 }
 
 export const bookCollectionService = new BookCollectionService();

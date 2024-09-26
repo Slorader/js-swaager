@@ -37,7 +37,13 @@ export class AuthorController extends Controller {
   // Supprime un auteur par ID
   @Delete("{id}")
   public async deleteAuthor(@Path() id: number): Promise<void> {
-    await authorService.deleteAuthor(id);
+    try {
+      await authorService.deleteAuthor(id);
+    } catch (error) {
+      const err = new Error((error as Error).message);
+      (err as any).status = 400;
+      throw err;
+    }
   }
 
   // Met à jour un auteur par ID

@@ -1,5 +1,6 @@
 import { Author } from "../models/author.model";
 import { Book } from "../models/book.model";
+import {BookCollection} from "../models/bookCollection.model"
 import {AuthorDTO} from "../dto/author.dto";
 import {AuthorService} from "./author.service";
 
@@ -50,7 +51,22 @@ export class BookService {
         return null;
     }
 
+    // Supprime un livre par ID
+    public async deleteBook(id: number): Promise<void> {
+        const book = await Book.findByPk(id);
 
+        if (!book) {
+            throw new Error("Book not found");
+        }
+
+        const collections = await BookCollection.findAll({ where: { book_id: id, available: true } });
+
+        if (collections.length > 0) {
+            throw new Error("Cannot delete book with available copies in the library collection");
+        }
+
+        await book.destroy();
+    }
 }
 
 export const bookService = new BookService();
