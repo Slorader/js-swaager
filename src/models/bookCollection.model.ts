@@ -1,5 +1,7 @@
 import { Model, DataTypes } from "sequelize";
+import { Book} from "./book.model";
 import sequelize from "../config/database";
+import {Author} from "./author.model";
 
 export interface BookCollectionAttributes {
     id?: number;
@@ -16,6 +18,8 @@ export class BookCollection
     public book_id!: number;
     public available!: boolean;
     public state!: number;
+    public book?: Book;
+
 }
 
 BookCollection.init(
@@ -43,5 +47,7 @@ BookCollection.init(
         tableName: "BookCollection",
     }
 );
+
+BookCollection.belongsTo(Book, {foreignKey: 'book_id', as: 'book'})
 
 export default BookCollection;

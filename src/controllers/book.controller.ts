@@ -40,7 +40,6 @@ export class BookController extends Controller {
       @Body() requestBody: BookDTO
   ): Promise<BookDTO | null> {
     const { title,publish_year, author, isbn } = requestBody;
-    const book = await bookService.getBookById(id);
 
     if (!author || !author.id)
     {
@@ -51,7 +50,7 @@ export class BookController extends Controller {
 
     if (!authorDetail)
     {
-      const error = new Error('Book not found');
+      const error = new Error('Author not found');
       (error as any).status = 404;
       throw error;
     }
